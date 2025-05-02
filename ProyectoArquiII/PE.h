@@ -3,14 +3,14 @@
 #include <thread>
 #include <atomic>
 #include <memory>
+#include <string>
 #include "Message.h"
-
 class Interconnect;
 
 class PE {
 public:
     PE(uint8_t id, uint8_t qos, std::shared_ptr<Interconnect> bus);
-    void loadInstructions(const std::vector<Message>& instrs);
+    void loadFromFile(const std::string& path);
     void start();
     void join();
     void receiveMessage(const Message& msg);
@@ -18,7 +18,6 @@ public:
 private:
     void run();
     void executeInstruction(const Message& instr);
-
     uint8_t pe_id;
     uint8_t qos;
     std::vector<Message> instructions;

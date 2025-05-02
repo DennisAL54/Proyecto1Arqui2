@@ -1,3 +1,3 @@
-/home/dennis/Escritorio/ProyectoArquiII/cmake-build-debug/CMakeFiles/ProyectoArquiII.dir
-/home/dennis/Escritorio/ProyectoArquiII/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/dennis/Escritorio/ProyectoArquiII/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/dennis/Escritorio/RepoArqui2/Proyecto1Arqui2/ProyectoArquiII/cmake-build-debug/CMakeFiles/ProyectoArquiII.dir
+/home/dennis/Escritorio/RepoArqui2/Proyecto1Arqui2/ProyectoArquiII/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/dennis/Escritorio/RepoArqui2/Proyecto1Arqui2/ProyectoArquiII/cmake-build-debug/CMakeFiles/rebuild_cache.dir
