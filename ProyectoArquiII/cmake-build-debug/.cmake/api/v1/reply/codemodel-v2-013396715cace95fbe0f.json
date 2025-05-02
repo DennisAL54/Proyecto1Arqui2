@@ -49,8 +49,8 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "/home/dennis/Escritorio/ProyectoArquiII/cmake-build-debug",
-		"source" : "/home/dennis/Escritorio/ProyectoArquiII"
+		"build" : "/home/dennis/Escritorio/RepoArqui2/Proyecto1Arqui2/ProyectoArquiII/cmake-build-debug",
+		"source" : "/home/dennis/Escritorio/RepoArqui2/Proyecto1Arqui2/ProyectoArquiII"
 	},
 	"version" : 
 	{

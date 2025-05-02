@@ -1,0 +1,29 @@
+# PE0 instrucción 1: escribe 4 bytes en memoria del PE1
+WRITE_MEM 0 1 0x100 4 0 16 AA BB CC DD
+
+# PE0 instrucción 2: lee 8 bytes desde memoria del PE1
+READ_MEM 0 1 0x200 8 0 16
+
+# PE0 instrucción 3: invalida línea 5 en todos los PEs
+BROADCAST_INVALIDATE 0 255 0x00 0 5 16
+
+# PE0 espera ack de invalidación de PE1
+INV_ACK 0 1 0 0 0 16
+
+# PE0 instrucción 5: completa invalidación
+INV_COMPLETE 0 1 0 0 0 16
+
+# PE0 instrucción 6: respuesta de lectura (simulada)
+READ_RESP 0 0 1 0x200 8 0 16 DE AD BE EF 00 11 22 33
+
+# PE0 instrucción 7: respuesta de escritura ok
+WRITE_RESP 0 0 1 0 0 0 16 1
+
+# PE0 instrucción 8: nueva escritura a memoria 0x300
+WRITE_MEM 0 2 0x300 16 1 32 FF EE DD CC BB AA 99 88 77 66 55 44 33 22
+
+# PE0 instrucción 9: nueva lectura de 16 bytes
+READ_MEM 0 2 0x300 16 1 32
+
+# PE0 instrucción 10: invoca broadcast de invalidación de línea 1
+BROADCAST_INVALIDATE 0 255 0x00 0 1 32

@@ -55,7 +55,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/home/dennis/Escritorio/ProyectoArquiII/cmake-build-debug"
+			"value" : "/home/dennis/Escritorio/RepoArqui2/Proyecto1Arqui2/ProyectoArquiII/cmake-build-debug"
 		},
 		{
 			"name" : "CMAKE_CACHE_MAJOR_VERSION",
@@ -559,7 +559,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/home/dennis/Escritorio/ProyectoArquiII/cmake-build-debug/CMakeFiles/pkgRedirects"
+			"value" : "/home/dennis/Escritorio/RepoArqui2/Proyecto1Arqui2/ProyectoArquiII/cmake-build-debug/CMakeFiles/pkgRedirects"
 		},
 		{
 			"name" : "CMAKE_GENERATOR",
@@ -619,7 +619,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/home/dennis/Escritorio/ProyectoArquiII"
+			"value" : "/home/dennis/Escritorio/RepoArqui2/Proyecto1Arqui2/ProyectoArquiII"
 		},
 		{
 			"name" : "CMAKE_INSTALL_PREFIX",
@@ -1167,7 +1167,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/home/dennis/Escritorio/ProyectoArquiII/cmake-build-debug"
+			"value" : "/home/dennis/Escritorio/RepoArqui2/Proyecto1Arqui2/ProyectoArquiII/cmake-build-debug"
 		},
 		{
 			"name" : "ProyectoArquiII_IS_TOP_LEVEL",
@@ -1191,7 +1191,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/home/dennis/Escritorio/ProyectoArquiII"
+			"value" : "/home/dennis/Escritorio/RepoArqui2/Proyecto1Arqui2/ProyectoArquiII"
 		},
 		{
 			"name" : "_CMAKE_CXX_LINKER_PUSHPOP_STATE_SUPPORTED",
