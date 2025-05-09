@@ -8,8 +8,13 @@ int main() {
     auto pe0 = std::make_shared<PE>(0, 0x10, bus);
     auto pe1 = std::make_shared<PE>(1, 0x20, bus);
     auto pe2 = std::make_shared<PE>(2, 0x30, bus);
+    auto pe3 = std::make_shared<PE>(2, 0x40, bus);
+    auto pe4 = std::make_shared<PE>(2, 0x50, bus);
+    auto pe5 = std::make_shared<PE>(2, 0x60, bus);
+    auto pe6 = std::make_shared<PE>(2, 0x70, bus);
+    auto pe7 = std::make_shared<PE>(2, 0x80, bus);
 
-    std::vector<std::shared_ptr<PE>> allPEs = {pe0, pe1, pe2};
+    std::vector<std::shared_ptr<PE>> allPEs = {pe0, pe1, pe2, pe3, pe4, pe5, pe6};
 
     // Registrar en el bus
     for (auto &pe : allPEs) {
