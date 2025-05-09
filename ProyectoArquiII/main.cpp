@@ -9,9 +9,12 @@ int main() {
     auto pe1 = std::make_shared<PE>(1, 0x20, bus);
     auto pe2 = std::make_shared<PE>(2, 0x30, bus);
 
-    bus->registerPE(0, pe0);
-    bus->registerPE(1, pe1);
-    bus->registerPE(2, pe2);
+    std::vector<std::shared_ptr<PE>> allPEs = {pe0, pe1, pe2};
+
+    // Registrar en el bus
+    for (auto &pe : allPEs) {
+        bus->registerPE(pe->getId(), pe);
+    }
 
     pe0->loadFromFile("ejemplo_pe0.txt");
     pe1->loadFromFile("ejemplo_pe1.txt");
@@ -24,6 +27,14 @@ int main() {
         more |= pe0->step();
         more |= pe1->step();
         more |= pe2->step();
+    }
+    for (auto& pe : allPEs) {
+        std::cout << "=== PE " << int(pe->getId()) << " STATISTICS ===\n";
+        std::cout << "Cycles run:       " << pe->getCycleCount() << "\n";
+        std::cout << "Cache hits:       " << pe->getStatCacheHits() << "\n";
+        std::cout << "Cache misses:     " << pe->getStatCacheMisses() << "\n";
+        std::cout << "Bytes read:       " << pe->getStatReadBytes() << "\n";
+        std::cout << "Bytes written:    " << pe->getStatWriteBytes() << "\n\n";
     }
 
     return 0;

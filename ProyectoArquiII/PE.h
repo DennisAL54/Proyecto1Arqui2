@@ -21,6 +21,11 @@ struct CacheLine {
 class Interconnect;
 class PE {
 public:
+    uint64_t getCycleCount() const    { return cycleCount; }
+    uint64_t getStatCacheHits() const { return statCacheHits; }
+    uint64_t getStatCacheMisses() const { return statCacheMisses; }
+    uint64_t getStatReadBytes() const { return statReadBytes; }
+    uint64_t getStatWriteBytes() const { return statWriteBytes; }
     PE(uint8_t id, uint8_t qos, std::shared_ptr<Interconnect> bus);
 
     // Carga instrucciones desde un texto o archivo
@@ -41,6 +46,12 @@ public:
     uint8_t getId() const { return pe_id; }
 
 private:
+    uint64_t cycleCount = 0;
+    uint64_t pendingLatency = 0;
+    uint64_t statCacheHits   = 0;
+    uint64_t statCacheMisses = 0;
+    uint64_t statReadBytes   = 0;
+    uint64_t statWriteBytes  = 0;
     int pendingInvalidations = 0; //Contador de Ack-invalidate
     void run();
     std::queue<Message> inbox;      // cola de mensajes entrantes
@@ -48,6 +59,7 @@ private:
     bool stalled = false;           // si está esperando respuesta
     uint32_t waitingAddr = 0;
     void executeInstruction(const Message& instr);
+    bool processOneMessage();
 
     uint8_t pe_id;
     uint8_t qos;
@@ -57,59 +69,6 @@ private:
     std::atomic<bool> running;
     std::vector<CacheLine> cache;
     std::shared_ptr<Interconnect> interconnect;
-
-    bool processOneMessage() {
-    std::lock_guard<std::mutex> lk(mtx_inbox);
-    if (inbox.empty()) return false;
-    Message msg = inbox.front();
-    inbox.pop();
-
-    switch (msg.type) {
-        case OpType::READ_RESP:
-            writeToCache(msg.addr, msg.data);
-            stalled = false;
-            std::cout << "[PE " << int(pe_id) << "] READ_RESP recibido, cache actualizada\n";
-            break;
-
-        case OpType::WRITE_RESP:
-            stalled = false;
-            std::cout << "[PE " << int(pe_id) << "] WRITE_RESP recibido, desbloqueado\n";
-            break;
-
-        case OpType::BROADCAST_INVALIDATE: {
-            // Invalidar línea si existe
-            auto [idx, tag] = getCacheIndexAndTag(msg.addr);
-            if (cache[idx].valid && cache[idx].tag == tag) {
-                cache[idx].valid = false;
-                std::cout << "[PE " << int(pe_id) << "] Invalidated cache line addr=" << msg.addr << "\n";
-            }
-            // Enviar INV_ACK de vuelta al emisor
-            Message ack { OpType::INV_ACK, pe_id, msg.src, msg.addr, {}, qos };
-            interconnect->sendMessage(ack);
-            std::cout << "[PE " << int(pe_id) << "] Sent INV_ACK to PE " << int(msg.src) << "\n";
-            break;
-        }
-
-        case OpType::INV_ACK: {
-            // Recibimos ack de otro PE: reenviamos INV_COMPLETE al originador original
-            // Suponemos msg.dest guarda el original requester
-            Message complete { OpType::INV_COMPLETE, pe_id, msg.dest, msg.addr, {}, qos };
-            interconnect->sendMessage(complete);
-            std::cout << "[PE " << int(pe_id) << "] Sent INV_COMPLETE to PE " << int(msg.dest) << "\n";
-            break;
-        }
-
-        case OpType::INV_COMPLETE:
-            // Podríamos contabilizar completes para liberar un write pending; por ahora log
-            std::cout << "[PE " << int(pe_id) << "] INV_COMPLETE recibido from PE " << int(msg.src) << "\n";
-            break;
-
-        default:
-            // Otros mensajes ya manejados antes
-            break;
-    }
-    return true;
-}
 
     std::pair<int, uint32_t> getCacheIndexAndTag(uint32_t addr) {
         const int block_size = 16;
