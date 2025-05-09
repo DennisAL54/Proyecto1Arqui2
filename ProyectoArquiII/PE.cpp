@@ -147,9 +147,3 @@ void PE::executeInstruction(const Message& instr) {
         interconnect->sendMessage(instr);
     }
 }
-
-/*void PE::receiveMessage(const Message& msg) {
-    std::cout << "[PE " << int(pe_id) << "] Recibió mensaje tipo "
-              << to_string(msg.type)
-              << " desde PE " << int(msg.src) << std::endl;
-}*/
