@@ -10,10 +10,9 @@ void Interconnect::registerPE(uint8_t id, std::shared_ptr<PE> pe) {
 void Interconnect::sendMessage(const Message& msg) {
     std::lock_guard<std::mutex> lock(mtx);
     if (msg.dest == 255) {
-        // Broadcast a todos menos al origen
-        for (auto &p : pe_map) {
-            if (p.first != msg.src)
-                p.second->receiveMessage(msg);
+        // broadcast
+        for (auto& [id, pe] : pe_map) {
+            if (id != msg.src) pe->receiveMessage(msg);
         }
         return;
     }
@@ -21,6 +20,6 @@ void Interconnect::sendMessage(const Message& msg) {
     if (it != pe_map.end()) {
         it->second->receiveMessage(msg);
     } else {
-        std::cerr << "[Interconnect] PE destino "<<int(msg.dest)<<" no encontrado.\n";
+        std::cerr << "[Interconnect] PE destino " << int(msg.dest) << " no encontrado." << std::endl;
     }
 }

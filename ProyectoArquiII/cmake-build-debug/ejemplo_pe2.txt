@@ -1,31 +1,4 @@
-# PE2 – 10 instrucciones
-
-# 1. Escritura de 4 bytes a PE0
-WRITE_MEM 2 0 0x120 4 0 64 DE AD BE EF
-
-# 2. Lectura de 8 bytes desde PE1
-READ_MEM 2 1 0x108 8 1 64
-
-# 3. Responde lectura con datos
-READ_RESP 2 2 1 0x108 8 1 64 AA BB CC DD EE FF 11 22
-
-# 4. Envía ack de invalidación a PE1
-INV_ACK 2 1 0 0 0 64
-
-# 5. Broadcast de invalidación línea 3
-BROADCAST_INVALIDATE 2 255 0x00 0 3 64
-
-# 6. Completa el broadcast
-INV_COMPLETE 2 255 0 0 0 64
-
-# 7. Respuesta de escritura NOT_OK
-WRITE_RESP 2 0 1 0 0 64 0
-
-# 8. Lectura de 16 bytes desde memoria principal (destino PE2)
-READ_MEM 2 2 0x300 16 3 64
-
-# 9. Broadcast de invalidación línea 7
-BROADCAST_INVALIDATE 2 255 0x00 0 7 64
-
-# 10. Escritura de 16 bytes a PE1
-WRITE_MEM 2 1 0x400 16 4 64 FF EE DD CC BB AA 99 88 77 66 55 44 33 22
+WRITE_MEM    2 2 8 4 0 1 11 22 33 44
+WRITE_RESP   255 2 8 4 0 1
+READ_MEM     2 2 8 4 0 1
+READ_RESP    255 2 8 4 0 1 11 22 33 44
