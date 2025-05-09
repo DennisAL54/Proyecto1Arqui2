@@ -7,7 +7,7 @@
 PE::PE(uint8_t id, uint8_t qos_level, std::shared_ptr<Interconnect> bus)
     : pe_id(id), qos(qos_level), interconnect(bus), running(false)
 {
-    cache.resize(128, std::vector<uint8_t>(16, 0));
+    cache.resize(128);
 }
 
 void PE::loadInstructions(const std::vector<Message>& instrs) {
@@ -70,21 +70,86 @@ void PE::run() {
 }
 
 bool PE::step() {
-    if (pc >= instructions.size()) return false;
-    executeInstruction(instructions[pc]);
-    pc++;
-    return true;
+    // 1) procesar 1 mensaje si hay
+    if (processOneMessage()) {
+        return true;  // consumió mensaje, contamos como actividad
+    }
+
+    // 2) si está stancado esperando respuesta, no ejecutar instrucción
+    if (stalled) {
+        return !inbox.empty();
+    }
+
+    // 3) si quedan instrucciones, ejecutar la siguiente
+    if (pc < instructions.size()) {
+        const Message instr = instructions[pc];
+
+        // Si es READ_MEM o WRITE_MEM y cache miss => stall
+        if (instr.type == OpType::READ_MEM && !checkCacheHit(instr.addr)) {
+            stalled = true;
+            waitingAddr = instr.addr;
+            // enviar la solicitud al bus
+            interconnect->sendMessage(instr);
+            std::cout << "[PE " << int(pe_id) << "] stall en READ_MEM addr=" << instr.addr << "\n";
+        }
+        else if (instr.type == OpType::WRITE_MEM && !checkCacheHit(instr.addr)) {
+            stalled = true;
+            waitingAddr = instr.addr;
+            writeToCache(instr.addr, instr.data);   // write-allocate
+            interconnect->sendMessage(instr);
+            std::cout << "[PE " << int(pe_id) << "] stall en WRITE_MEM addr=" << instr.addr << "\n";
+        }
+        else {
+            // hit o cualquier otro instr
+            executeInstruction(instr);
+        }
+
+        pc++;
+        return true;
+    }
+
+    return false;  // nada por hacer
 }
 
 void PE::executeInstruction(const Message& instr) {
     std::cout << "[PE " << int(pe_id) << "] Ejecuta "
               << to_string(instr.type)
               << " hacia PE " << int(instr.dest) << std::endl;
-    interconnect->sendMessage(instr);
+
+    // NUEVO: manejo básico de hit/miss para READ_MEM y WRITE_MEM
+    if (instr.type == OpType::READ_MEM) {
+        uint32_t addr = instr.addr;
+        if (checkCacheHit(addr)) {
+            std::cout << "  → Cache HIT en dirección " << addr << std::endl;
+            auto datos = readFromCache(addr);
+            // aquí podrías generar un READ_RESP inmediato si quisieras
+        } else {
+            std::cout << "  → Cache MISS en dirección " << addr << std::endl;
+            // En un miss: forward al Interconnect para traer datos
+            interconnect->sendMessage(instr);
+        }
+    }
+    else if (instr.type == OpType::WRITE_MEM) {
+        uint32_t addr = instr.addr;
+        const auto& datos = instr.data;  // asumimos campo data presente
+        if (checkCacheHit(addr)) {
+            std::cout << "  → Cache HIT (write) en dirección " << addr << std::endl;
+            writeToCache(addr, datos);
+        } else {
+            std::cout << "  → Cache MISS (write) en dirección " << addr << std::endl;
+            // cargar línea, luego escribir
+            writeToCache(addr, datos);
+            interconnect->sendMessage(instr);
+        }
+    }
+    else {
+        // otros tipos de mensaje siguen igual
+        interconnect->sendMessage(instr);
+    }
 }
 
-void PE::receiveMessage(const Message& msg) {
+/*void PE::receiveMessage(const Message& msg) {
     std::cout << "[PE " << int(pe_id) << "] Recibió mensaje tipo "
               << to_string(msg.type)
               << " desde PE " << int(msg.src) << std::endl;
-}
+}*/
