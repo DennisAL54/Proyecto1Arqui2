@@ -25,7 +25,9 @@ public:
     uint64_t getStatCacheHits() const { return statCacheHits; }
     uint64_t getStatCacheMisses() const { return statCacheMisses; }
     uint64_t getStatReadBytes() const { return statReadBytes; }
+    uint64_t getStatWeightedReadBytes() const { return statWeightedReadBytes; }
     uint64_t getStatWriteBytes() const { return statWriteBytes; }
+    uint64_t getStatWeightedWriteBytes() const { return statWeightedWriteBytes; }
     PE(uint8_t id, uint8_t qos, std::shared_ptr<Interconnect> bus);
 
     // Carga instrucciones desde un texto o archivo
@@ -62,7 +64,12 @@ private:
     bool processOneMessage();
 
     uint8_t pe_id;
+
     uint8_t qos;
+    // Métricas QoS‑aware
+    uint64_t statWeightedReadBytes  = 0;   // bytes leídos × qos
+    uint64_t statWeightedWriteBytes = 0;   // bytes escritos × qos
+
     std::vector<Message> instructions;
     size_t pc = 0;                     // contador de programa
     std::thread thread;

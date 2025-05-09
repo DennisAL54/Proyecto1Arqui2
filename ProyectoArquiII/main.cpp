@@ -35,6 +35,8 @@ int main() {
         std::cout << "Cache misses:     " << pe->getStatCacheMisses() << "\n";
         std::cout << "Bytes read:       " << pe->getStatReadBytes() << "\n";
         std::cout << "Bytes written:    " << pe->getStatWriteBytes() << "\n\n";
+        std::cout << "Weighted bytes read:   " << pe->getStatWeightedReadBytes() << "\n";
+        std::cout << "Weighted bytes written:" << pe->getStatWeightedWriteBytes() << "\n\n";
     }
 
     return 0;

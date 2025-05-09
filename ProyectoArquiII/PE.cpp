@@ -112,36 +112,36 @@ void PE::executeInstruction(const Message& instr) {
         if (checkCacheHit(addr)) {
             statCacheHits++;
             pendingLatency += LAT_CACHE_HIT;
-            statReadBytes += instr.size;
             std::cout << "  → Cache HIT, +1 ciclo\n";
         } else {
             statCacheMisses++;
             pendingLatency += LAT_CACHE_MISS + instr.size * LAT_MEM_PER_BYTE;
-            statReadBytes += instr.size;
             interconnect->sendMessage(instr);
             std::cout << "  → Cache MISS, +"
                       << LAT_CACHE_MISS + instr.size * LAT_MEM_PER_BYTE
                       << " ciclos\n";
         }
+        statReadBytes += instr.size;
+        statWeightedReadBytes += instr.size * qos;
     }
     else if (instr.type == OpType::WRITE_MEM) {
         uint32_t addr = instr.addr;
         if (checkCacheHit(addr)) {
             statCacheHits++;
             pendingLatency += LAT_CACHE_HIT;
-            statWriteBytes += instr.data.size();
             writeToCache(addr, instr.data);
             std::cout << "  → Write HIT, +1 ciclo\n";
         } else {
             statCacheMisses++;
             pendingLatency += LAT_CACHE_MISS + instr.data.size() * LAT_MEM_PER_BYTE;
-            statWriteBytes += instr.data.size();
             writeToCache(addr, instr.data);
             interconnect->sendMessage(instr);
             std::cout << "  → Write MISS, +"
                       << LAT_CACHE_MISS + instr.data.size() * LAT_MEM_PER_BYTE
                       << " ciclos\n";
         }
+        statWriteBytes += instr.data.size();
+        statWeightedWriteBytes += instr.data.size() * qos;
     }
     else {
         // otros tipos de mensaje siguen igual
