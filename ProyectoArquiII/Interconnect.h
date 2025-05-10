@@ -1,6 +1,7 @@
 #pragma once
 
 #include <queue>
+#include <atomic>
 #include <mutex>
 #include <vector>
 #include <map>
