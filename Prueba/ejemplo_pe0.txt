@@ -1,4 +1,10 @@
-WRITE_MEM    0 1 0 4 0 1 AA BB CC DD
-WRITE_RESP   255 0 0 4 0 1 0
-READ_MEM     0 0 0 4 0 1
-READ_RESP    255 0 0 4 0 1 AA BB CC DD
+WRITE_MEM        0 255    0    4 0 1  AA BB CC DD
+WRITE_RESP       255 0    0    4 0 1
+READ_MEM         0 255    0    4 0 1
+READ_RESP        255 0    0    4 0 1  AA BB CC DD
+BROADCAST_INVALIDATE 0 255 0 0 0 1
+INV_ACK          0 0    0    0 0 1
+INV_COMPLETE     0 0    0    0 0 1
+WRITE_MEM        0 255    4    4 0 1  11 22 33 44
+READ_MEM         0 255    4    4 0 1
+READ_RESP        255 0    4    4 0 1  11 22 33 44

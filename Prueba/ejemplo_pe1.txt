@@ -1,2 +1,10 @@
-READ_MEM     1 0 0 4 0 1
-READ_RESP    255 1 0 4 0 1 AA BB CC DD
+WRITE_MEM        1 255   16    4 0 2  DE AD BE EF
+WRITE_RESP       255 1   16    4 0 2
+READ_MEM         1 255   16    4 0 2
+READ_RESP        255 1   16    4 0 2  DE AD BE EF
+BROADCAST_INVALIDATE 1 255 16 0 0 2
+INV_ACK          1 1    16    0 0 2
+INV_COMPLETE     1 1    16    0 0 2
+WRITE_MEM        1 255   20    4 0 2  01 02 03 04
+READ_MEM         1 255   20    4 0 2
+READ_RESP        255 1   20    4 0 2  01 02 03 04

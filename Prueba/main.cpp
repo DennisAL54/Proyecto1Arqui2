@@ -14,16 +14,22 @@ int main() {
     auto pe6 = std::make_shared<PE>(2, 0x70, bus);
     auto pe7 = std::make_shared<PE>(2, 0x80, bus);
 
-    std::vector<std::shared_ptr<PE>> allPEs = {pe0, pe1, pe2, pe3, pe4, pe5, pe6};
+    std::vector<std::shared_ptr<PE>> allPEs = {pe0, pe1, pe2, pe3, pe4, pe5, pe6, pe7};
 
     // Registrar en el bus
     for (auto &pe : allPEs) {
         bus->registerPE(pe->getId(), pe);
     }
-
+    
+    //8 PEs
     pe0->loadFromFile("ejemplo_pe0.txt");
     pe1->loadFromFile("ejemplo_pe1.txt");
     pe2->loadFromFile("ejemplo_pe2.txt");
+    pe3->loadFromFile("ejemplo_pe3.txt");
+    pe4->loadFromFile("ejemplo_pe4.txt");
+    pe5->loadFromFile("ejemplo_pe5.txt");
+    pe6->loadFromFile("ejemplo_pe6.txt");
+    pe7->loadFromFile("ejemplo_pe7.txt");
 
     // Ejecucion por pasos
     bool more = true;
@@ -32,6 +38,11 @@ int main() {
         more |= pe0->step();
         more |= pe1->step();
         more |= pe2->step();
+        more |= pe3->step();
+        more |= pe4->step();
+        more |= pe5->step();
+        more |= pe6->step();
+        more |= pe7->step();
     }
     for (auto& pe : allPEs) {
         std::cout << "=== PE " << int(pe->getId()) << " STATISTICS ===\n";
