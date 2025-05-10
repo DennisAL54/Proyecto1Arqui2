@@ -1,0 +1,6 @@
+1. Version de g++ utilizada: 11.4.0, Version de Ubuntu usada para el desarrollo: 22.04
+2. Segun se muestra en el Makefile, es requerido que la version de g++ usada soporte c++17
+3. Para correr el programa, abra una terminal que este localizada en la carpeta del proyecto
+4. Una vez ahi, ejecute el comando 'make'.
+5. Una vez este se haya completado, ejecute el comando 'make run' para ejecutar el proyecto
+6. En la consola deberia aparecer toda la ejecucion del proyecto (con sus labels dependiendo del PE) asi como las estadisticas generales
