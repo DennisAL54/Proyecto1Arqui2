@@ -25,7 +25,7 @@ int main() {
     pe1->loadFromFile("ejemplo_pe1.txt");
     pe2->loadFromFile("ejemplo_pe2.txt");
 
-    // Ejecución por pasos
+    // Ejecucion por pasos
     bool more = true;
     while (more) {
         more = false;

@@ -37,4 +37,7 @@ struct Message {
     uint32_t   cache_line;
     std::vector<uint8_t> data;
     uint8_t    qos;
+    uint64_t timeSent = 0;       // ciclo en el que se envió
+    uint64_t deliveryTime = 0;   // ciclo en que debe llegar al destino
+
 };
